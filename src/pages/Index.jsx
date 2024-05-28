@@ -1,7 +1,16 @@
-import { Box, Container, Flex, Heading, Text, VStack, HStack, Link, Spacer } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Text, VStack, HStack, Link, Spacer, Button } from "@chakra-ui/react";
 import { FaHome, FaUser, FaEnvelope } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container maxW="container.xl" p={4}>
       {/* Navigation Bar */}
@@ -9,15 +18,15 @@ const Index = () => {
         <Heading size="md">My Blog</Heading>
         <Spacer />
         <HStack spacing={4}>
-          <Link href="#" display="flex" alignItems="center">
+          <Link as={RouterLink} to="/" display="flex" alignItems="center">
             <FaHome />
             <Text ml={2}>Home</Text>
           </Link>
-          <Link href="#" display="flex" alignItems="center">
+          <Link as={RouterLink} to="#" display="flex" alignItems="center">
             <FaUser />
             <Text ml={2}>About</Text>
           </Link>
-          <Link href="#" display="flex" alignItems="center">
+          <Link as={RouterLink} to="#" display="flex" alignItems="center">
             <FaEnvelope />
             <Text ml={2}>Contact</Text>
           </Link>
@@ -28,19 +37,15 @@ const Index = () => {
       <Flex direction={{ base: "column", md: "row" }} align="start">
         {/* Blog Posts */}
         <Box flex="3" p={4}>
+          <Button as={RouterLink} to="/add-post" colorScheme="teal" mb={4}>Add New Post</Button>
           <VStack spacing={8} align="stretch">
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">Blog Post Title 1</Heading>
-              <Text mt={4}>This is a summary of the blog post content. Click to read more...</Text>
-            </Box>
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">Blog Post Title 2</Heading>
-              <Text mt={4}>This is a summary of the blog post content. Click to read more...</Text>
-            </Box>
-            <Box p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">Blog Post Title 3</Heading>
-              <Text mt={4}>This is a summary of the blog post content. Click to read more...</Text>
-            </Box>
+            {posts.map((post, index) => (
+              <Box key={index} p={5} shadow="md" borderWidth="1px">
+                <Heading fontSize="xl">{post.title}</Heading>
+                <Text mt={4}>{post.content}</Text>
+                <Text mt={2} fontSize="sm" color="gray.500">Tags: {post.tags.join(", ")}</Text>
+              </Box>
+            ))}
           </VStack>
         </Box>
 
