@@ -1,9 +1,9 @@
-import { Box, Container, Flex, Heading, Text, VStack, HStack, Link, Spacer, Button } from "@chakra-ui/react";
-import { FaHome, FaUser, FaEnvelope } from "react-icons/fa";
+import { Box, Container, Flex, Heading, Text, VStack, HStack, Link, Spacer, Button, IconButton } from "@chakra-ui/react";
+import { FaHome, FaUser, FaEnvelope, FaMoon, FaSun } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-const Index = () => {
+const Index = ({ toggleColorMode, colorMode }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Index = () => {
   return (
     <Container maxW="container.xl" p={4}>
       {/* Navigation Bar */}
-      <Flex as="nav" bg="gray.800" color="white" p={4} mb={8} align="center">
+      <Flex as="nav" bg={colorMode === "light" ? "gray.800" : "gray.900"} color="white" p={4} mb={8} align="center">
         <Heading size="md">My Blog</Heading>
         <Spacer />
         <HStack spacing={4}>
@@ -30,6 +30,14 @@ const Index = () => {
             <FaEnvelope />
             <Text ml={2}>Contact</Text>
           </Link>
+        <IconButton
+            icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
+            isRound
+            size="md"
+            alignSelf="center"
+            onClick={toggleColorMode}
+            aria-label="Toggle dark mode"
+          />
         </HStack>
       </Flex>
 
@@ -50,7 +58,7 @@ const Index = () => {
         </Box>
 
         {/* Sidebar */}
-        <Box flex="1" p={4} bg="gray.50" ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
+        <Box flex="1" p={4} bg={colorMode === "light" ? "gray.50" : "gray.700"} ml={{ md: 4 }} mt={{ base: 4, md: 0 }}>
           <VStack spacing={4} align="stretch">
             <Box p={5} shadow="md" borderWidth="1px">
               <Heading fontSize="lg">About Me</Heading>
